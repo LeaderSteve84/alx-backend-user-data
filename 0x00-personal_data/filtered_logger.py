@@ -67,3 +67,29 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     except mysql.connector.Error as err:
         print(f"Error: {err}")
         return None
+
+
+def main():
+    """The function will obtain a database connection using get_db
+     and retrieve all rows in the users table and display
+     each row under a filtered format.
+    """
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    descript = [descpt[0] for descpt in cursor.description]
+
+    logger = get_logger()
+
+    for user in cursor:
+        user_info = "".join(
+                f'{des}={str(usr)}; ' for usr, des in zip(user, descript)
+            )
+        logger.info(user_info)
+
+    cursor.close()
+    db.close()
+
+
+if __name__ == "__main__":
+    main()
