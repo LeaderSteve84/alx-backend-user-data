@@ -1,4 +1,4 @@
-#!/usr/bin/env ipython3
+#!/usr/bin/env python3
 """module for the function filter_datum"""
 from typing import List
 import re
