@@ -7,6 +7,9 @@ import re
 import logging
 
 
+PII_FIELDS = ("name", "email", "phone", "ssn", "password")
+
+
 def filter_datum(
         fields: List[str], redaction: str, message: str, separator: str
         ) -> str:
@@ -43,9 +46,6 @@ def get_logger() -> logging.Logger:
     sh.setFormatter(formatter)
     logger.addHandler(sh)
     return logger
-
-
-PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
