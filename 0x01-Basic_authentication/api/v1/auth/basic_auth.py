@@ -30,7 +30,7 @@ class BasicAuth(Auth):
         """
         try:
             value_of_utf = base64_authorization_header.encode('utf-8')
-            decode_value= b64decode(value_of_utf).decode('utf-8')
+            decode_value = b64decode(value_of_utf).decode('utf-8')
             return decode_value
         except (AttributeError, ValueError) as e:
             return None
