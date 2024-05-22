@@ -15,7 +15,7 @@ class Auth:
         if len(path) == 0:
             return True
 
-        sl = True if path[len(path) -1] == '/' else False
+        sl = True if path[len(path) - 1] == '/' else False
         tPath = path if sl else path + '/'
 
         for path_exc in excluded_paths:
