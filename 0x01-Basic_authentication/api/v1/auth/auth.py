@@ -19,15 +19,15 @@ class Auth:
         tPath = path if slh else path + '/'
 
         for path_exc in excluded_paths:
-            l_path_exc = len(path_exc)
-            if l_path_exc == 0:
+            length_path_exc = len(path_exc)
+            if length_path_exc == 0:
                 continue
 
-            if path_exc[l_path_exc - 1] != '*':
+            if path_exc[length_path_exc - 1] == '*':
                 if tPath == path_exc:
                     return False
                 else:
-                    if path_exc[:-1] == path[:l_path_exc - 1]:
+                    if path_exc[:-1] == path[:length_path_exc - 1]:
                         return False
         return True
 
