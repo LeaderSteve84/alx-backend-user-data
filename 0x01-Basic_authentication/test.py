@@ -3,43 +3,39 @@
 from flask import request
 from typing import List, TypeVar
 
-
 class Auth:
     """Auth class"""
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """returns False - path and excluded_paths
-        """
+        """Checks if authentication is required for the given path"""
         if path is None or excluded_paths is None or len(excluded_paths) == 0:
             return True
 
-        if len(path) == 0:
-            return True
-
+        # Ensure path always ends with a slash for comparison
         if not path.endswith('/'):
             path += '/'
 
         for excluded_path in excluded_paths:
+            # Handle wildcard exclusion paths
             if excluded_path.endswith('*'):
                 if path.startswith(excluded_path[:-1]):
                     return False
 
+            # Ensure excluded_path always ends with a slash for comparison
             if not excluded_path.endswith('/'):
                 excluded_path += '/'
 
+            # Exact match for non-wildcard paths
             if excluded_path == path:
                 return False
 
         return True
 
     def authorization_header(self, request=None) -> str:
-        """returns None - request will be the Flask request object
-        """
+        """Returns None - request will be the Flask request object"""
         if request is None:
             return None
-        else:
-            return request.headers.get('Authorization', None)
+        return request.headers.get('Authorization', None)
 
     def current_user(self, request=None) -> TypeVar('User'):
-        """returns None - request will be the Flask request object
-        """
+        """Returns None - request will be the Flask request object"""
         return None
