@@ -19,13 +19,13 @@ if AUTH_TYPE == 'auth':
     from api.v1.auth.auth import Auth
     auth = Auth()
 
-elif AUTH_TYPE == 'basic_auth':
+if AUTH_TYPE == 'basic_auth':
     from api.v1.auth.basic_auth import BasicAuth
     auth = BasicAuth()
 
-elif AUTH_TYPE == 'session_auth':
+"""elif AUTH_TYPE == 'session_auth':
     from api.v1.auth.session_auth import SessionAuth
-    auth = SessionAuth()
+    auth = SessionAuth()"""
 
 
 @app.errorhandler(404)
