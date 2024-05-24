@@ -29,7 +29,7 @@ class Auth:
                 else:
                     if path_exc[:-1] == path[:length_path_exc - 1]:
                         return False
-        return True
+        return False
 
     def authorization_header(self, request=None) -> str:
         """returns None - request will be the Flask request object
