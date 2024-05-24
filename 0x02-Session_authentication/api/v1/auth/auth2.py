@@ -15,20 +15,20 @@ class Auth:
         if len(path) == 0:
             return True
 
-        if not path.endswith('/'):
-            path += '/'
+        slh = True if path[len(path) - 1] == '/' else False
+        tPath = path if slh else path + '/'
 
-        for excluded_path in excluded_paths:
-            if excluded_path.endswith('*'):
-                if path.startswith(excluded_path[:-1]):
+        for path_exc in excluded_paths:
+            length_path_exc = len(path_exc)
+            if length_path_exc == 0:
+                continue
+
+            if path_exc[length_path_exc - 1] == '*':
+                if tPath == path_exc:
                     return False
-
-            if not excluded_path.endswith('/'):
-                excluded_path += '/'
-
-            if excluded_path == path:
-                return False
-
+                else:
+                    if path_exc[:-1] == path[:length_path_exc - 1]:
+                        return False
         return True
 
     def authorization_header(self, request=None) -> str:
