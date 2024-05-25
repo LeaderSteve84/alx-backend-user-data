@@ -14,23 +14,27 @@ def auth_login():
     from api.v1.app import auth
     # get email from form
     email = request.form.get('email', None)
-    if (email is None or len(email)) == 0:
+    if not email:
         return jsonify({"error": "email missing"}), 400
 
     # get password from form
     pwd = request.form.get('password')
-    if pwd is None or len(pwd) == 0:
+    if not pwd:
         return jsonify({"error": "password missing"}), 400
-    
+
     # search for user by email
     users = User.search({"email": email})
-    if len(users) == 0:
+    if not users:
         return jsonify({"error": "no user found for this email"}), 404
-    
-    for user in users:
-        if user.is_valid_password(pwd):
-            response = make_response(user.to_json())
-            SESSION_NAME = os.getenv('SESSION_NAME')
-            response.set_cookie(SESSION_NAME, auth.create_session(user.id))
-            return response
-    return jsonify({"error": "wrong password"}), 401
+
+    user = users[0]
+    if user.is_valid_password(pwd):
+        return jsonify({"error": "wrong password"}), 401
+
+    # create session ID and set it in cookie
+    session_id = auth.create_session(user.id)
+    response = make_response(user.to_json())
+    session_name = os.getenv('SESSION_NAME', '_my_session_id')
+    response.set_cookie(session_name, session_id)
+
+    return response
