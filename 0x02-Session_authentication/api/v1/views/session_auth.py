@@ -21,12 +21,12 @@ def auth_login():
     pwd = request.form.get('password')
     if pwd is None or len(pwd) == 0:
         return jsonify({"error": "password missing"}), 400
-    
+
     # search for user by email
     users = User.search({"email": email})
     if len(users) == 0:
         return jsonify({"error": "no user found for this email"}), 404
-    
+
     for user in users:
         if user.is_valid_password(pwd):
             response = make_response(user.to_json())
