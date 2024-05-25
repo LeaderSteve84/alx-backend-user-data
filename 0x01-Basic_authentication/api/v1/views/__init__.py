@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" DocDocDocDocDocDoc
+""" Initialize at start of application
 """
 from flask import Blueprint
 
