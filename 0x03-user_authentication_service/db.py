@@ -34,13 +34,16 @@ class DB:
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """adds, update db and returns anew user object"""
-        new_user = User(email=email, hashed_password=hashed_password)
-        session = self._session
-        # add the new user
-        session.add(new_user)
-        # update the database
-        session.commit()
-        session.refresh(new_user)
+        try:
+            new_user = User(email=email, hashed_password=hashed_password)
+            session = self._session
+            # add the new user
+            session.add(new_user)
+            # update the database
+            session.commit()
+        except Exception:
+            session.rollback()
+            new_user = None
         return new_user
 
     def find_user_by(self, **kwargs) -> User:
