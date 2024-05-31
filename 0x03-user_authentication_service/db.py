@@ -47,12 +47,29 @@ class DB:
         """function that finds a user created
         by using a keyword argument
         """
-        if kwargs is None:
-            raise InvalidRequestError
-        for key in kwargs.keys():
-            if key not in User.__table__.columns.keys():
-                raise InvalidRequestError
-        user_query = self._session.query(User).filter_by(**kwargs).first()
-        if user_query is None:
-            raise NoResultFound
-        return user_query
+        if not kwargs:
+            raise InvalidRequestError('No key word argument provided')
+
+        for k in kwargs.keys():
+            if k not in User.__table__.columns.keys():
+                raise InvalidRequestError(f'Invalid attribute: {k}')
+
+        userQuery = self._session.query(User).filter_by(**kwargs).first()
+
+        if userQuery is None:
+
+            raise NoResultFound('No argument found with the given attributes')
+
+        return userQuery
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """use find_user_by to locate the user to update,"""
+        user = self.find_user_by(id=user_id)
+        for k in kwargs.keys():
+            if k not in User.__table__.columns.keys():
+                raise ValueError(f'Invalid attribute: {k}')
+
+        for ki, va in kwargs.items():
+            setattr(user, ki, va)
+
+        self._session.commit()
