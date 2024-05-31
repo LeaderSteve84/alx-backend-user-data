@@ -38,5 +38,5 @@ class DB:
         session.add(new_user)
         # update the database
         session.commit()
-
+        session.refresh(new_user)
         return new_user
