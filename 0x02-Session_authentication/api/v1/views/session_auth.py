@@ -14,7 +14,7 @@ def auth_login():
     from api.v1.app import auth
     # get email from form
     email = request.form.get('email', None)
-    if (email is None or len(email)) == 0:
+    if email is None or len(email) == 0:
         return jsonify({"error": "email missing"}), 400
 
     # get password from form
@@ -34,3 +34,15 @@ def auth_login():
             response.set_cookie(SESSION_NAME, auth.create_session(user.id))
             return response
     return jsonify({"error": "wrong password"}), 401
+
+
+@app_views.route('/auth_session/logout', methods=['DELETE'],
+        strict_slashes=False)
+def logout_session():
+    """function to logout session
+    """
+    from api.v1.app import auth
+    if auth.destroy_session(request) is False:
+        abort(401)
+
+    return jsonify({}), 200
