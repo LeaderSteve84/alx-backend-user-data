@@ -18,7 +18,7 @@ class DB:
     def __init__(self) -> None:
         """Initialize a new DB instance
         """
-        self._engine = create_engine("sqlite:///a.db", echo=True)
+        self._engine = create_engine("sqlite:///a.db", echo=False)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
@@ -33,18 +33,17 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """adds, update db and returns anew user object"""
-        try:
-            new_user = User(email=email, hashed_password=hashed_password)
-            session = self._session
-            # add the new user
-            session.add(new_user)
-            # update the database
-            session.commit()
-        except Exception:
-            session.rollback()
-            new_user = None
-        return new_user
+        """create, adds/save the user(update db) and
+        returns a new user object.
+        Args:
+            email (str): user email address
+            hashed_password (str): password of user
+        Return: User
+        """
+        user = User(email=email, hashed_password=hashed_password)
+        self._session.add(user)
+        self._session.commit()
+        return user
 
     def find_user_by(self, **kwargs) -> User:
         """function that finds a user created
