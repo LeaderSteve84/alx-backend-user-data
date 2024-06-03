@@ -34,5 +34,24 @@ def get_user():
             }), 200
 
 
+@app.route("/sessions", methods=[''], strict_slashes=False)
+def login():
+    """respond to the POST /sessions route."""
+    email = request.form.get('email')
+    passwd = request.form.get('password')
+
+    if email is None or passwd is None:
+        abort(401)
+    isValid = AUTH.valid_login(email=email, password=password)
+
+    if isValid is False:
+        abort(401)
+
+    session = AUTH.create_session(email=email)
+    response = jsonify({'email': email, 'message': 'logged in'})
+    response.set_cookie('session_id', session)
+    return response
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
