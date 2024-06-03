@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """module of auth.py"""
+from uuid import uuid4
 import bcrypt
 from db import DB
 from user import User
